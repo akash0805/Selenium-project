@@ -12,6 +12,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.util.Properties;
+import java.io.FileInputStream;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import java.io.IOException;
+
 
 
 
@@ -20,12 +25,26 @@ public class reservation
 {
 	
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
+		WebDriver driver = null;
+		Properties obj=new Properties();
+		FileInputStream objfile=new FileInputStream(System.getProperty("user.dir")+"\\application.properties");
+		obj.load(objfile);
+		obj.getProperty("URL");
+		obj.getProperty("browser");
+		if(obj.getProperty("browser").equalsIgnoreCase("chrome"))
+		{
 		System.setProperty("webdriver.chrome.driver", "F:\\chromedriver.exe");
-		 WebDriver driver=new ChromeDriver();
-		 driver.get("http://newtours.demoaut.com/");
-		 driver.manage().window().maximize();
+		driver=new ChromeDriver();
+		}
+		else if(obj.getProperty("browser").equalsIgnoreCase("firefox"))
+		{
+	    System.setProperty("webdriver.gecko.driver", "C:\\geckodriver.exe");
+		driver=new FirefoxDriver();
+		}
+		driver.get(obj.getProperty("URL"));
+		driver.manage().window().maximize();
 		 String titleText=driver.getTitle();
 		 String title="Welcome: Mercury Tours";
 		 if(titleText.equals(title))
@@ -67,7 +86,7 @@ public class reservation
 	     driver.findElement(By.name("passLast0")).sendKeys("Peter");
 	     driver.findElement(By.name("creditnumber")).sendKeys("123456");
 	     driver.findElement(By.name("buyFlights")).click();
-	     
+	     driver.quit();
 
 		
 	}
